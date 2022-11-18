@@ -1,0 +1,13 @@
+server:
+  port: 7788
+
+spring:
+  application:
+    name: guacamole-demo
+
+guacamole:
+  baseUrl: http://10.31.1.65:9090/guacamole/api
+  serverIp: 10.31.1.65
+  serverPort: 9090
+  username: guacadmin
+  password: guacadmin
