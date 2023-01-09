@@ -1,5 +1,13 @@
 package com.jwt.demo.util.cache;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -7,17 +15,38 @@ import java.util.concurrent.TimeUnit;
  * @description 缓存测试
  * @createTime 2022年09月29日 14:21
  */
+@RestController
+@RequestMapping("/cache")
 public class CacheTest {
 
     private static final Cache<String, String> CODE_CACHE = new Cache<>();
 
-    public static void main(String[] args) {
-        String str = "jiangwentao";
-        String code = "123456";
-        CODE_CACHE.put(str + "#hci", code, 60, TimeUnit.MINUTES);
-        System.out.println(CODE_CACHE.get(str + "#hci"));
+    @PostMapping("/test")
+    public void testCache() {
+        System.out.println(CODE_CACHE.get("111"));
+        if (CODE_CACHE.get("111") == null) {
+            CODE_CACHE.put("111", "aa1", 1, TimeUnit.MINUTES);
+        }
 
-        CODE_CACHE.put("123" + "#hci", "code", 60, TimeUnit.MINUTES);
-        System.out.println(CODE_CACHE.get("123" + "#hci"));
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+
+        List<String> pathList = new ArrayList<>();
+        pathList.add("/data/cmp/windows/files/569/569.txt");
+        pathList.add("/data/cmp/windows/files/570/570.txt");
+
+        StringBuilder msgBuilder = new StringBuilder("下载文件：");
+        pathList.forEach(path -> {
+            String name = new File(path).getName();
+            msgBuilder.append(name).append(",");
+        });
+        String result = msgBuilder.toString();
+        if (CollectionUtils.isNotEmpty(pathList)) {
+            result = result.substring(0, result.length() - 1);
+        }
+        System.out.println(result);
+
+
     }
 }
